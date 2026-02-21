@@ -1,5 +1,5 @@
 {
-  "name": "opencode-session-history",
+  "name": "opencode-session-search",
   "version": "0.1.0",
   "description": "OpenCode plugin for searching and retrieving chat history",
   "main": "./dist/index.js",

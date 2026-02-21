@@ -1,10 +1,74 @@
-# OpenCode Session History
+# OpenCode Session Search
 
 A plugin for OpenCode that provides tools to search and retrieve your local chat history.
 
+## Tools
+
+### `session-search`
+
+Search your local OpenCode chat history for sessions containing specific text.
+
+**Args**
+- `query` (string, required): Text to search for (1-200 chars, non-whitespace)
+- `limitSessions` (number, optional): Max sessions to return (1-12, default: 6)
+
+**Returns**
+- Matching sessions with metadata (title, directory, match count)
+- Snippets from each session (2 per session, 220 chars each)
+- Suggested `session-transcript` calls and a `question`-tool prompt to let users pick which session to open
+
+### `session-transcript`
+
+Reconstruct the full transcript of a specific chat session.
+
+**Args**
+- `sessionId` (string, required): Session ID (e.g., `ses_xxx`)
+- `limit` (number, optional): Max entries to return (1-120, default: 80)
+- `order` (string, optional): `asc` or `desc` (default: `asc`)
+
+**Returns**
+- Session metadata (title, slug, directory, project info)
+- Full conversation entries with timestamps and roles
+
 ## Installation
 
-### Local Plugin (Recommended for personal use)
+### npm (Recommended)
+
+Add the package to your OpenCode config:
+
+```json
+{
+  "plugin": ["opencode-session-history"]
+}
+```
+
+Supported config locations:
+- Global config: `~/.config/opencode/opencode.json`
+- Project config: `.opencode/opencode.json`
+
+Restart OpenCode so the plugin is loaded.
+
+## Example Usage
+
+```
+Find my recent work on authentication:
+⚙ session-search [query=auth login, limitSessions=5]
+
+Get the full conversation:
+⚙ session-transcript [sessionId=ses_abc123, limit=100]
+```
+
+Run the same search from your terminal:
+
+```bash
+bun run search -- "auth login" --limitSessions 5
+```
+
+This command uses the same query path as the `session-search` tool and prints JSON.
+
+## Development
+
+### Local install
 
 Install directly from this repo:
 
@@ -21,28 +85,11 @@ This copies `index.ts` to:
 Manual copy option:
 
 ```bash
-# Global plugins (available in all projects)
 mkdir -p ~/.config/opencode/plugins
 cp index.ts ~/.config/opencode/plugins/history.ts
 ```
 
 Restart OpenCode and the tools will be available automatically.
-
-### Install from npm (OpenCode config)
-
-After publishing to npm, add the package name to your OpenCode config (as documented by OpenCode plugin setup):
-
-```json
-{
-  "plugin": ["opencode-session-history"]
-}
-```
-
-You can add this to either:
-- Global config: `~/.config/opencode/opencode.json`
-- Project config: `.opencode/opencode.json`
-
-Then restart OpenCode so the plugin is loaded.
 
 ## Versioning
 
@@ -65,52 +112,6 @@ Then publish:
 ```bash
 bun publish
 ```
-
-## Tools
-
-### `session-search`
-
-Search your local OpenCode chat history for sessions containing specific text.
-
-**Args:**
-- `query` (string, required): Text to search for (1-200 chars, non-whitespace)
-- `limitSessions` (number, optional): Max sessions to return (1-12, default: 6)
-
-**Returns:**
-- Matching sessions with metadata (title, directory, match count)
-- Snippets from each session (2 per session, 220 chars each)
-- Suggested `session-transcript` calls and a `question`-tool prompt to let users pick which session to open
-
-### `session-transcript`
-
-Reconstruct the full transcript of a specific chat session.
-
-**Args:**
-- `sessionId` (string, required): Session ID (e.g., `ses_xxx`)
-- `limit` (number, optional): Max entries to return (1-120, default: 80)
-- `order` (string, optional): `asc` or `desc` (default: `asc`)
-
-**Returns:**
-- Session metadata (title, slug, directory, project info)
-- Full conversation entries with timestamps and roles
-
-## Example Usage
-
-```
-Find my recent work on authentication:
-⚙ session-search [query=auth login, limitSessions=5]
-
-Get the full conversation:
-⚙ session-transcript [sessionId=ses_abc123, limit=100]
-```
-
-Run the same search from your terminal:
-
-```bash
-bun run search -- "auth login" --limitSessions 5
-```
-
-This command uses the same query path as the `session-search` tool and prints JSON.
 
 ## Configuration
 
