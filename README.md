@@ -2,6 +2,8 @@
 
 A plugin for OpenCode that provides tools to search and retrieve your local chat history.
 
+![OpenCode Session History](assets/cover.png)
+
 ## Tools
 
 ### `session-search`
