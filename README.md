@@ -40,7 +40,7 @@ Add the package to your OpenCode config:
 
 ```json
 {
-  "plugin": ["opencode-session-history"]
+  "plugin": ["opencode-session-search"]
 }
 ```
 
