@@ -9,7 +9,9 @@ TARGET_DIR="${1:-$HOME/.config/opencode/plugins/history}"
 
 mkdir -p "$TARGET_DIR"
 
-cp "$PLUGIN_ROOT/index.ts" "$TARGET_DIR/index.ts"
+for file in index.ts history.ts database.ts v1.ts; do
+  cp "$PLUGIN_ROOT/$file" "$TARGET_DIR/$file"
+done
 
-echo "Installed index.ts to: $TARGET_DIR"
+echo "Installed plugin and supporting modules to: $TARGET_DIR"
 echo "Restart OpenCode to load the updated plugin."
