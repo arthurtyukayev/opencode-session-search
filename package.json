@@ -9,17 +9,20 @@
   "files": [
     "dist",
     "index.ts",
+    "history.ts",
+    "database.ts",
+    "v1.ts",
     "README.md",
     "CHANGELOG.md",
     "LICENSE",
     "scripts/install-local.sh"
   ],
   "scripts": {
-    "build": "bun build ./index.ts --outfile ./dist/index.js --target bun --format esm",
-    "typecheck": "bunx tsc --noEmit",
+    "build": "bun build ./index.ts --outfile ./dist/index.js --target bun --format esm --external @opencode-ai/plugin",
+    "typecheck": "tsc --noEmit",
     "install:local": "bash scripts/install-local.sh",
-    "test": "bun run typecheck",
-    "prepublishOnly": "bun run build && bun run typecheck"
+    "test": "bun test && bun run typecheck",
+    "prepublishOnly": "bun run build && bun run test"
   },
   "keywords": [
     "opencode",
@@ -37,10 +40,17 @@
     "bun": ">=1.0.0"
   },
   "peerDependencies": {
-    "@opencode-ai/plugin": "^1.0.0",
+    "@opencode-ai/plugin": "^1.18.29",
+    "@opencode/plugin": "^2.0.18",
     "bun": "^1.0.0"
   },
+  "peerDependenciesMeta": {
+    "@opencode-ai/plugin": { "optional": true },
+    "@opencode/plugin": { "optional": true }
+  },
   "devDependencies": {
+    "@opencode-ai/plugin": "1.18.32",
+    "@opencode/plugin": "2.0.18",
     "@types/bun": "latest",
     "typescript": "^5.0.0"
   }

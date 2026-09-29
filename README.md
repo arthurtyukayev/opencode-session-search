@@ -48,7 +48,18 @@ Reconstruct the full transcript of a specific chat session.
 
 ### npm (Recommended)
 
-Add the package to your OpenCode config:
+The default entrypoint supports OpenCode **1.18.29+** and **2.0.18+**.
+OpenCode 1 calls `server()`; OpenCode 2 calls `setup()`.
+
+For OpenCode 2, add the package to your OpenCode config:
+
+```json
+{
+  "plugins": ["opencode-session-search"]
+}
+```
+
+For OpenCode 1:
 
 ```json
 {
@@ -93,17 +104,17 @@ Install directly from this repo:
 bun run install:local
 ```
 
-This copies `index.ts` to:
+This copies the entrypoint and its supporting modules to:
 
 ```bash
-~/.config/opencode/plugins/history.ts
+~/.config/opencode/plugins/history/
 ```
 
 Manual copy option:
 
 ```bash
-mkdir -p ~/.config/opencode/plugins
-cp index.ts ~/.config/opencode/plugins/history.ts
+mkdir -p ~/.config/opencode/plugins/history
+cp index.ts history.ts database.ts v1.ts ~/.config/opencode/plugins/history/
 ```
 
 Restart OpenCode and the tools will be available automatically.
@@ -134,12 +145,20 @@ bun publish
 
 The plugin resolves the DB path in this order:
 1. `OPENCODE_DB_PATH` env var (if set)
-2. `opencode db path` (platform-aware)
-3. Fallback: `~/.local/share/opencode/opencode.db`
+2. `opencode debug paths db` (OpenCode 2; respects its channel and `OPENCODE_DB`)
+3. `opencode db path` (OpenCode 1)
+4. Fallback: `$XDG_DATA_HOME/opencode/opencode.db`, or `~/.local/share/opencode/opencode.db`
+
+The database is opened read-only. Connection-local TEMP views normalize V1's
+`session`/`message`/`part` and V2's `session_v2`/`session_message` tables. If both
+layouts contain the same session ID, the V2 copy takes precedence. User text and
+assistant text are searchable; reasoning, tool payloads, and control messages are
+excluded. V2 text entries use a synthetic `partId` of `<message-id>:<content-index>`.
+This searches the selected local database, not a remote OpenCode server.
 
 ## Publish Checklist
 
-- Run type checks: `bun run test` (or `bun run typecheck`)
+- Run tests and type checks: `bun run test`
 - Build distributable file: `bun run build`
 - Preview package contents: `bun pm pack --dry-run`
 - Confirm version bump uses SemVer (`bun pm version patch|minor|major`)
